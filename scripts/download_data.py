@@ -1,68 +1,43 @@
-"""Download the MT-LIFT dataset (Meituan, 2024) into data/raw/.
+"""Download the Lazada voucher dataset (Alibaba Group, KDD 2022) into data/raw/.
 
-Tries the Google Drive mirror with gdown. If that fails, prints manual
-download instructions for the Google Drive and Baidu Drive mirrors.
+Files come from the mirror maintained for the libuplift package:
+https://github.com/jszymon/uplift_sklearn_data/releases/tag/Lazada
 """
 from pathlib import Path
 import sys
-import tarfile
-import zipfile
+import urllib.request
 
-GDRIVE_FILE_ID = "1dslFa9EGrVVoO_040ZYM16cIH-SKDuss"
+BASE_URL = "https://github.com/jszymon/uplift_sklearn_data/releases/download/Lazada"
 RAW_DIR = Path(__file__).resolve().parents[1] / "data" / "raw"
-EXPECTED = ("train.csv", "test.csv")
 
-MANUAL_INSTRUCTIONS = """
-Automatic download failed. Download MT-LIFT manually from either mirror and
-place train.csv and test.csv in data/raw/:
-
-  Google Drive: https://drive.google.com/file/d/1dslFa9EGrVVoO_040ZYM16cIH-SKDuss/view
-  Baidu Drive:  https://pan.baidu.com/s/1YmE5g-Y71ULNptiWqpToPA  (extraction code: 06nb)
-"""
+# remote file name -> (local file name, expected size in bytes)
+FILES = {
+    "Lazada_trainset.csv.gz": ("lazada_train.csv.gz", 75_748_426),
+    "Lazada_testset.csv.gz": ("lazada_test.csv.gz", 17_076_799),
+    "Lazada_LICENSE": ("LICENSE_lazada", 1_713),
+}
 
 
-def already_present() -> bool:
-    return all(any(RAW_DIR.rglob(name)) for name in EXPECTED)
-
-
-def extract(archive: Path) -> None:
-    if zipfile.is_zipfile(archive):
-        with zipfile.ZipFile(archive) as zf:
-            zf.extractall(RAW_DIR)
-    elif tarfile.is_tarfile(archive):
-        with tarfile.open(archive) as tf:
-            tf.extractall(RAW_DIR, filter="data")
-    else:
+def download(remote: str, local: Path, expected_size: int) -> None:
+    if local.exists() and local.stat().st_size == expected_size:
+        print(f"Already present: {local.name}")
         return
-    archive.unlink()
+    tmp = local.with_suffix(local.suffix + ".part")
+    print(f"Downloading {remote} ...")
+    urllib.request.urlretrieve(f"{BASE_URL}/{remote}", tmp)
+    size = tmp.stat().st_size
+    if size != expected_size:
+        tmp.unlink()
+        raise RuntimeError(f"{remote}: expected {expected_size:,} bytes, got {size:,}")
+    tmp.rename(local)
+    print(f"Saved {local.name} ({size / 1e6:.1f} MB)")
 
 
 def main() -> int:
     RAW_DIR.mkdir(parents=True, exist_ok=True)
-    if already_present():
-        print(f"MT-LIFT already present in {RAW_DIR}")
-        return 0
-
-    try:
-        import gdown
-    except ImportError:
-        print("gdown is not installed (pip install gdown).")
-        print(MANUAL_INSTRUCTIONS)
-        return 1
-
-    target = RAW_DIR / "mt_lift_download"
-    out = gdown.download(id=GDRIVE_FILE_ID, output=str(target), quiet=False)
-    if out is None:
-        print(MANUAL_INSTRUCTIONS)
-        return 1
-
-    extract(target)
-    if not already_present():
-        print(f"Downloaded to {target}, but train.csv / test.csv were not found.")
-        print(MANUAL_INSTRUCTIONS)
-        return 1
-
-    print(f"MT-LIFT ready in {RAW_DIR}")
+    for remote, (local_name, size) in FILES.items():
+        download(remote, RAW_DIR / local_name, size)
+    print(f"Lazada dataset ready in {RAW_DIR}")
     return 0
 
 
