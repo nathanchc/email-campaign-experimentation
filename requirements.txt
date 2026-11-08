@@ -9,3 +9,5 @@ seaborn>=0.13
 pyarrow>=14
 jupyterlab>=4
 pytest>=7
+# the project toolkit in src/expt, installed in editable mode
+-e .

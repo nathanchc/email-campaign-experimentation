@@ -9,3 +9,4 @@ data/processed/*
 reports/figures/*
 !reports/figures/.gitkeep
 .DS_Store
+*.egg-info/
