@@ -98,6 +98,27 @@ def mde_proportion(
     return brentq(gap, 1e-12, upper)
 
 
+def power_proportions(
+    p_control: float,
+    p_treatment: float,
+    n_control: int,
+    n_treatment: int,
+    alpha: float = 0.05,
+    two_sided: bool = True,
+) -> float:
+    """Probability of detecting the change p_control -> p_treatment with these groups."""
+    if not (0 < p_control < 1 and 0 < p_treatment < 1):
+        raise ValueError("proportions must be strictly between 0 and 1")
+    z_alpha = norm.ppf(1 - alpha / 2) if two_sided else norm.ppf(1 - alpha)
+    delta = abs(p_treatment - p_control)
+    p_bar = (n_control * p_control + n_treatment * p_treatment) / (n_control + n_treatment)
+    se_null = math.sqrt(p_bar * (1 - p_bar) * (1 / n_control + 1 / n_treatment))
+    se_alt = math.sqrt(
+        p_control * (1 - p_control) / n_control + p_treatment * (1 - p_treatment) / n_treatment
+    )
+    return float(norm.cdf((delta - z_alpha * se_null) / se_alt))
+
+
 def mde_mean(
     sd: float,
     n_control: int,

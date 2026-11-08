@@ -53,6 +53,21 @@ The email labels describe the merchandise featured, not the customer's sex.
 
 > **Did either email produce incremental visits, purchases and revenue beyond what would have happened anyway, which email worked better, and which customers should receive which email in the future?**
 
+## Follow the case the way a company runs it
+
+The case is told as it would happen inside the retailer, with you as the data scientist. The data is real; the people, messages and business figures are invented and labelled as a scenario.
+
+| Step | Document | What happens |
+|------|----------|--------------|
+| 1 | [The request](docs/01_request.md) | E-mail Marketing asks for a test; the CFO doubts that email causes any sales |
+| 2 | [Kickoff notes](docs/02_kickoff_notes.md) | The data scientist turns the request into a decision, a metric and constraints |
+| 3 | [Experiment design doc](docs/03_experiment_design_doc.md) | Break-even lift, power, the holdout split and decision rules, signed off before launch ([numbers](notebooks/01_experiment_design.ipynb)) |
+| 4 | Pre-launch and validation checks | Lesson 02 *(next)* |
+| 5 | Results readout | Lessons 03–05 |
+| 6 | Targeting and decision memo | Lessons 06–07 |
+
+The headline of the design: **a campaign pays for itself at about +11% more purchases, but a 64,000-customer test can reliably detect only about +47%.** How a data scientist plans around that gap, and gets stakeholders to agree to it in advance, is the subject of lesson 01.
+
 ## Learning path
 
 Each notebook is one lesson. Reusable code lives in `src/expt` and is tested in `tests/`.
@@ -61,7 +76,7 @@ Each notebook is one lesson. Reusable code lives in `src/expt` and is tested in 
 
 | # | Notebook | What you learn |
 |---|----------|----------------|
-| 01 | `01_context_and_design.ipynb` | The metric tree (visit × conversion × spend per buyer), primary / secondary / guardrail metrics, minimum detectable effect and power, written as a pre-registration before looking at outcomes |
+| 01 | `01_experiment_design.ipynb` + [docs](docs/) | Designing the test the way a company does: from the request and kickoff to a signed design doc with metric roles, the break-even lift, power, the holdout split and decision rules, all before any outcome is seen |
 | 02 | `02_data_validation.ipynb` | Data quality checks, sample-ratio mismatch across three arms, covariate balance: trusting the randomisation before trusting the result |
 | 03 | `03_binary_metrics.ipynb` | Visit and conversion rates: proportion tests, confidence intervals, relative lift, and multiple-comparison correction for two treatments against one control |
 | 04 | `04_revenue_metric.ipynb` | Spend per customer: why the t-test struggles with zero-inflated, heavy-tailed data; bootstrap confidence intervals; decomposing revenue into conversion × spend per buyer |
@@ -107,6 +122,7 @@ The other parts use each remaining source only for what it does well: Lazada for
 ├── data/
 │   ├── raw/            # downloaded files (never committed)
 │   └── processed/      # compact parquet files
+├── docs/               # the case as company documents: request, kickoff, design doc
 ├── notebooks/          # numbered lessons, run in order
 ├── scripts/
 │   ├── download_data.py

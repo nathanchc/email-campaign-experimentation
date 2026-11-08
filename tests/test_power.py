@@ -6,6 +6,7 @@ import pytest
 from expt.power import (
     mde_mean,
     mde_proportion,
+    power_proportions,
     sample_size_mean,
     sample_size_proportions,
     zero_inflated_sd,
@@ -39,6 +40,17 @@ def test_mde_proportion_inverts_sample_size():
     mde = mde_proportion(0.05, n_c, n_t, alpha=0.025)
     needed_c, _ = sample_size_proportions(0.05, 0.05 + mde, alpha=0.025)
     assert needed_c == pytest.approx(n_c, abs=2)
+
+
+def test_power_at_mde_is_requested_power():
+    mde = mde_proportion(0.05, 8_000, 8_000, alpha=0.05, power=0.8)
+    assert power_proportions(0.05, 0.05 + mde, 8_000, 8_000, alpha=0.05) == pytest.approx(0.8, abs=1e-6)
+
+
+def test_power_grows_with_effect_size():
+    small = power_proportions(0.05, 0.055, 10_000, 10_000)
+    large = power_proportions(0.05, 0.065, 10_000, 10_000)
+    assert 0 < small < large < 1
 
 
 def test_unequal_groups_need_more_customers_in_total():
