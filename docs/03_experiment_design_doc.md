@@ -154,4 +154,4 @@ Written before launch and applied as written:
 
 ---
 
-**Next:** Step 4, pre-launch and data validation checks (lesson 02, coming next).
+**Next:** [Step 4: validation report](04_validation_report.md) (lesson 02).
