@@ -53,6 +53,25 @@ def clean_hillstrom(raw: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+LAZADA_FEATURES = [f"f{i}" for i in range(83)]
+
+
+def load_lazada(split: str) -> pd.DataFrame:
+    """Load the Lazada voucher data (Part 2). ``split`` is "train" (targeted)
+    or "test" (randomised). Reads the compact parquet file if `make prepare`
+    has been run, otherwise the raw CSV."""
+    if split not in {"train", "test"}:
+        raise ValueError('split must be "train" or "test"')
+    parquet = ROOT / "data" / "processed" / f"lazada_{split}.parquet"
+    if parquet.exists():
+        return pd.read_parquet(parquet)
+    csv = ROOT / "data" / "raw" / f"lazada_{split}.csv.gz"
+    if not csv.exists():
+        raise FileNotFoundError(f"{csv} not found. Run `make data-lazada` first.")
+    dtypes = {"label": "int8", "is_treat": "int8", **{f: "float32" for f in LAZADA_FEATURES}}
+    return pd.read_csv(csv, dtype=dtypes)
+
+
 def load_hillstrom(path: Path | str = RAW_CSV) -> pd.DataFrame:
     """Read the raw CSV and return the cleaned, analysis-ready DataFrame."""
     path = Path(path)

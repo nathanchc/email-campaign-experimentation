@@ -87,9 +87,11 @@ Each notebook is one lesson. Reusable code lives in `src/expt` and is tested in 
 
 ### Part 2 (optional): what goes wrong without randomisation (Lazada)
 
+Summary of the findings: [docs/part2_selection_bias.md](docs/part2_selection_bias.md).
+
 | # | Notebook | What you learn |
 |---|----------|----------------|
-| 08 | `08_selection_bias_lazada.ipynb` | Lazada released the same voucher treatment twice: assigned by its targeting system, and assigned at random. The targeted data suggests the voucher multiplies purchases about six-fold; the randomised data shows roughly +11%. We measure the bias and test whether propensity weighting and doubly robust estimation can recover the randomised answer |
+| 08 | `08_selection_bias_lazada.ipynb` | Lazada released the same voucher treatment twice: assigned by its targeting system, and assigned at random. The targeted data suggests a six-fold effect; the randomised data shows +11%. Outcome regression, propensity weighting and doubly robust estimation remove most of the bias but none recovers the randomised answer, and why: overlap, unmeasured confounding and population shift |
 
 ### Part 3 (optional): a modern coupon test (simulated)
 
