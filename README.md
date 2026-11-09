@@ -63,7 +63,7 @@ The case is told as it would happen inside the retailer, with you as the data sc
 | 2 | [Kickoff notes](docs/02_kickoff_notes.md) | The data scientist turns the request into a decision, a metric and constraints |
 | 3 | [Experiment design doc](docs/03_experiment_design_doc.md) | Break-even lift, power, the holdout split and decision rules, signed off before launch ([numbers](notebooks/01_experiment_design.ipynb)) |
 | 4 | [Validation report](docs/04_validation_report.md) | Go / no-go: data quality, sample ratio and covariate balance, checked before any result is read ([checks](notebooks/02_validation.ipynb)) |
-| 5 | Results readout | Lessons 03–05 |
+| 5 | [Results readout](docs/05_readout.md) | Both emails cause extra purchases and clear break-even many times over; the men's email wins ([purchases](notebooks/03_purchases_and_visits.ipynb), [revenue](notebooks/04_revenue.ipynb), [precision](notebooks/05_variance_reduction.ipynb)) |
 | 6 | Targeting and decision memo | Lessons 06–07 |
 
 The headline of the design: **a campaign pays for itself at about +11% more purchases, but a 64,000-customer test can reliably detect only about +47%.** How a data scientist plans around that gap, and gets stakeholders to agree to it in advance, is the subject of lesson 01.
@@ -78,9 +78,9 @@ Each notebook is one lesson. Reusable code lives in `src/expt` and is tested in 
 |---|----------|----------------|
 | 01 | `01_experiment_design.ipynb` + [docs](docs/) | Designing the test the way a company does: from the request and kickoff to a signed design doc with metric roles, the break-even lift, power, the holdout split and decision rules, all before any outcome is seen |
 | 02 | `02_validation.ipynb` | Data quality checks, sample-ratio mismatch, covariate balance and the multiple-testing trap inside balance checks, ending in a go / no-go before any result is read |
-| 03 | `03_binary_metrics.ipynb` | Visit and conversion rates: proportion tests, confidence intervals, relative lift, and multiple-comparison correction for two treatments against one control |
-| 04 | `04_revenue_metric.ipynb` | Spend per customer: why the t-test struggles with zero-inflated, heavy-tailed data; bootstrap confidence intervals; decomposing revenue into conversion × spend per buyer |
-| 05 | `05_variance_reduction.ipynb` | CUPED and regression adjustment with pre-treatment covariates; how much tighter the estimates get |
+| 03 | `03_purchases_and_visits.ipynb` | Purchase and visit rates: proportion tests, confidence intervals for absolute and relative lift, Holm correction, and the conditional-metric trap (purchases among visitors) |
+| 04 | `04_revenue.ipynb` | Revenue per customer: zero-inflated, heavy-tailed data; Welch vs bootstrap intervals; why Mann-Whitney is the wrong test; decomposition; the business case against break-even |
+| 05 | `05_variance_reduction.ipynb` | Regression adjustment and CUPED: why they barely help on this data, a simulation of when they do, and what to log for the next test |
 | 06 | `06_heterogeneity_and_uplift.ipynb` | Segment effects and the post-hoc slicing trap; uplift models (S-, T- and X-learners) evaluated with Qini curves |
 | 07 | `07_targeting_and_decision_memo.ipynb` | Which customers should get which email, the incremental revenue of that policy, and a recommendation a marketing lead can act on |
 

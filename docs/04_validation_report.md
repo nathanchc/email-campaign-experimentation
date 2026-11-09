@@ -88,4 +88,4 @@ Chi-square = 0.20, **p = 0.90**. The threshold for a mismatch is p < 0.001. **Pa
 
 ---
 
-**Next:** Step 5, the results readout (lessons 03–05).
+**Next:** [Step 5: results readout](05_readout.md) (lessons 03–05).
