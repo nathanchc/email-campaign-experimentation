@@ -1,7 +1,7 @@
 """Loading the Hillstrom dataset in analysis-ready form.
 
-The cleaning steps are the ones decided in the validation report
-(docs/company_documents/ch3_validation_report.md); chapter 3 explains each of them.
+The cleaning steps follow the data validation in docs/3_data_validation.md;
+notebooks/ch3_data_checks.ipynb explains each of them.
 """
 from __future__ import annotations
 

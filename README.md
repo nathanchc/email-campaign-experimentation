@@ -1,6 +1,6 @@
 # Does email cause sales?
 
-**An end-to-end A/B testing case study:** a randomised email experiment with 64,000 customers, taken from a CFO's sceptical question to a recommendation with money attached.
+**My end-to-end A/B testing project:** measuring how much revenue an email campaign actually causes, using a randomised experiment with 64,000 customers, from the analysis plan to a recommendation with money attached.
 
 `Python` · `experiment design` · `power analysis` · `causal inference` · `uplift modelling` · `sequential testing`
 
@@ -8,65 +8,66 @@
 
 ## The question
 
-A retailer's email report credits campaigns with $1.2M of revenue a quarter, but it counts every purchase by anyone who got an email. The CFO's question: **how much of that did the email actually *cause*?** Answering it takes a randomised experiment with a holdout group that gets no email.
+Email reports usually credit a campaign with every purchase by anyone who received it, including customers who would have bought anyway. I wanted to answer the question a sceptical finance lead would ask: **how much revenue does the email actually *cause*, and is it worth what it costs?** That takes a randomised experiment with a holdout group that gets no email.
 
-## The answer
+## What I found
 
 - **Both emails cause extra purchases.** The men's email more than doubled the purchase rate (**+119%**); the women's raised it by half (**+54%**).
-- **They pay for themselves many times over.** The men's email adds **$0.77 of revenue per email** against a break-even of $0.056, about **$183,000 of net margin per send** to the full customer file.
-- **Send the men's email to everyone.** It wins overall, and no targeting rule or machine-learning model did better.
+- **They pay for themselves many times over.** The men's email adds **$0.77 of revenue per email** against a break-even of $0.056, about **$183,000 of net margin per send** to a 640,000-customer file (under my stated cost and margin assumptions).
+- **Send the men's email to everyone.** It wins overall, and no targeting rule or machine-learning model I tried did better.
 
 ![Incremental revenue per email against break-even](images/revenue_vs_breakeven.png)
 
-## The case at a glance
+## How I did it
 
-**[Read the full case study →](CASE_STUDY.md)** (about 15 minutes, plain language, with charts)
+**[Read the full report →](REPORT.md)** (about 15 minutes, with charts)
 
-| Chapter | The question at this stage | What I found |
+I treated the 2008 experiment as if I were planning it: I wrote the analysis plan, with metrics, power analysis and decision rules, **before looking at any outcome**.
+
+| Step | The question at this stage | What I found |
 |---|---|---|
-| [1. The problem](CASE_STUDY.md#1-the-problem) | What decision depends on this test? | Only a holdout can separate caused sales from sales that would have happened anyway |
-| [2. Designing the test](CASE_STUDY.md#2-designing-the-test) | What lift is worth having, and can the test see it? | Break-even is +11% purchases, but the test can only reliably detect +47%, so "not significant" was pre-defined as inconclusive |
-| [3. Checking the data](CASE_STUDY.md#3-checking-the-data) | Can we trust the data and the randomisation? | Randomisation worked; only online purchases are recorded and spend is capped, so results are conservative |
-| [4. Results](CASE_STUDY.md#4-results) | Did the emails work, and are they worth it? | Both emails clear break-even 7–14× over; the men's email wins |
-| [5. Who should get which email?](CASE_STUDY.md#5-who-should-get-which-email) | Does targeting beat sending to everyone? | No: the women's email only works for women's buyers, and models don't beat a blanket send |
-| [6. The recommendation](CASE_STUDY.md#6-the-recommendation) | What should the business do? | Roll out, keep a long-term holdout; the decision survives even if 93% of the lift were pulled forward |
+| [1. The question](REPORT.md#1-the-question) | What should the experiment answer, and what is a sale worth? | Only a holdout separates caused sales from sales that would have happened anyway |
+| [2. Analysis plan](REPORT.md#2-analysis-plan) | What lift is worth having, and can the test see it? | Break-even is +11% purchases, but the test can only reliably detect +47%, so I defined "not significant" as inconclusive in advance |
+| [3. Data validation](REPORT.md#3-data-validation) | Can I trust the data and the randomisation? | Randomisation worked; only online purchases are recorded and spend is capped, so results are conservative |
+| [4. Results](REPORT.md#4-results) | Did the emails work, and are they worth it? | Both emails clear break-even 7–14× over; the men's email wins |
+| [5. Targeting](REPORT.md#5-targeting) | Does targeting beat sending to everyone? | No: the women's email only works for women's buyers, and models don't beat a blanket send |
+| [6. Recommendation](REPORT.md#6-recommendation) | What should the business do? | Roll out and keep a long-term holdout; the decision holds even if 93% of the lift were pulled forward |
 
-**Two extensions** show what the main case cannot:
+**Two extensions** cover what the main case cannot:
 
-- **[A. Without randomisation](CASE_STUDY.md#extension-a-what-goes-wrong-without-randomisation)** (real Lazada data): a voucher's effect estimated from targeted data was **13× too large**, and statistical corrections couldn't fully fix it.
-- **[B. A five-arm coupon test](CASE_STUDY.md#extension-b-a-coupon-test-with-five-arms-and-the-danger-of-peeking)** (simulation with a known truth): the coupon that maximises orders **loses the most money**, and checking results daily turns 5% false alarms into **22%**.
+- **[A. Without randomisation](REPORT.md#extension-a-what-goes-wrong-without-randomisation)** (real Lazada data): a voucher's effect estimated from targeted data was **13× too large**, and statistical corrections couldn't fully fix it.
+- **[B. A five-arm coupon test](REPORT.md#extension-b-a-five-arm-coupon-test-and-the-danger-of-peeking)** (simulation with a known truth): the coupon that maximises orders **loses the most money**, and checking results daily turns 5% false alarms into **22%**.
 
-## What this project demonstrates
+## Methods
 
-| Area | Methods |
+| Area | What I used |
 |---|---|
-| **Experiment design** | Metric trees and metric roles, pre-registration, break-even analysis, power and minimum detectable effect, holdout sizing |
-| **Validation** | Sample-ratio mismatch tests, covariate balance (standardised differences, joint tests), data-quality checks |
+| **Experiment design** | Metric choice from a revenue decomposition, pre-registration, break-even analysis, power and minimum detectable effect, holdout sizing |
+| **Validation** | Sample-ratio mismatch test, covariate balance (standardised differences, joint tests), data-quality checks |
 | **Analysis** | Proportion tests, Holm and Dunnett corrections, bootstrap and delta-method intervals, regression adjustment and CUPED |
 | **Causal inference and ML** | Uplift modelling (T- and S-learners, Qini curves), policy evaluation by inverse propensity weighting, IPW and doubly robust estimation |
 | **Monitoring** | A/A tests, peeking simulations, O'Brien–Fleming sequential boundaries, Bayesian stopping rules |
 | **Engineering** | A tested Python package (`src/expt`, 50 unit tests), reproducible pipeline (`make all`), checksum-verified data downloads |
-| **Communication** | Company-style documents: design doc, validation report, results readout, decision memo |
 
-## How to read this repo
+## Repository guide
 
 | If you want... | Go to |
 |---|---|
-| The story and the results | [`CASE_STUDY.md`](CASE_STUDY.md) |
-| The analysis behind each chapter | [`notebooks/`](notebooks/): `ch2_…` to `ch6_…` for the case, `extA_…` and `extB…` for the extensions |
-| The documents a data scientist would write at each stage | [`docs/company_documents/`](docs/company_documents/) |
+| The story and the results | [`REPORT.md`](REPORT.md) |
+| My working document for each step: brief, plan, validation, results, targeting, recommendation | [`docs/`](docs/) |
+| The analysis behind each step | [`notebooks/`](notebooks/): `ch2_…` to `ch6_…` for the main case, `extA_…` and `extB…` for the extensions |
 | The reusable code | [`src/expt/`](src/expt/), tested in [`tests/`](tests/) |
 
 ```
 .
-├── CASE_STUDY.md            # the full story, start here
-├── notebooks/               # analysis, numbered by chapter
-├── docs/company_documents/  # request, kickoff, design doc, validation report, readout, targeting, memo
-├── src/expt/                # toolkit: power, validation, inference, uplift, policy, causal, simulate, sequential
-├── tests/                   # unit tests for the toolkit
-├── images/                  # charts used in this README and the case study
-├── scripts/                 # data download, preparation and figure export
-└── Makefile                 # make all: data, tests and every notebook
+├── REPORT.md     # the full story, start here
+├── docs/         # project brief, analysis plan, data validation, results, targeting, recommendation
+├── notebooks/    # analysis, numbered by report section
+├── src/expt/     # toolkit: power, validation, inference, uplift, policy, causal, simulate, sequential
+├── tests/        # unit tests for the toolkit
+├── images/       # charts used in this README and the report
+├── scripts/      # data download, preparation and figure export
+└── Makefile      # make all: data, tests and every notebook
 ```
 
 ## Run it
@@ -85,7 +86,7 @@ Executed notebooks are written to `runs/`, leaving the published ones untouched.
 - **Lazada** (extension A): Zhong, K. et al. (2022). *DESCN: Deep Entire Space Cross Networks for Individual Treatment Effect Estimation.* KDD 2022. [github.com/kailiang-zhong/DESCN](https://github.com/kailiang-zhong/DESCN). Distributed by Alibaba Group under a BSD-style license.
 - **Coupon simulation** (extension B): simulated in [`src/expt/simulate.py`](src/expt/simulate.py), loosely modelled on large-scale coupon tests such as Meituan's MT-LIFT.
 
-The company, its people and its business figures (margins, costs, file size) are an invented scenario; the data and results are real. No data is committed to this repository. Code is MIT-licensed.
+The data and results are real; costs, margins and file size are my assumptions, listed in the [project brief](docs/1_project_brief.md). No data is committed to this repository. Code is MIT-licensed.
 
 ## Author
 

@@ -1,7 +1,7 @@
 """Shared chart style so every notebook looks the same.
 
 Colours come from a colour-blind-checked palette: one fixed colour per
-experiment arm, used consistently across lessons.
+experiment arm, used consistently across notebooks.
 """
 from __future__ import annotations
 
