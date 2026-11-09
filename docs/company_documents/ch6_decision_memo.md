@@ -1,6 +1,6 @@
-# Step 7: Decision memo
+# Chapter 6 · Decision memo
 
-> **Scenario note.** The data and results are real (Hillstrom, 2008). Margin, costs, file size, budget and the people involved are the invented scenario from the [request](01_request.md) and [kickoff](02_kickoff_notes.md). Numbers: [`notebooks/07_decision_memo.ipynb`](../notebooks/07_decision_memo.ipynb).
+> A company document from **Chapter 6** of the [case study](../../CASE_STUDY.md#6-the-recommendation). The data is real; the people and business figures are an invented scenario. Analysis: [`ch6_recommendation.ipynb`](../../notebooks/ch6_recommendation.ipynb).
 
 **To:** CFO; Head of E-mail Marketing
 **From:** Nathan Chen, Data Science
@@ -20,9 +20,9 @@
 
 ## Why we can trust this
 
-- The test was designed and its decision rules signed off **before launch** ([design doc](03_experiment_design_doc.md)), and results were read only after the data and randomisation passed all checks ([validation report](04_validation_report.md)).
+- The test was designed and its decision rules signed off **before launch** ([design doc](ch2_experiment_design_doc.md)), and results were read only after the data and randomisation passed all checks ([validation report](ch3_validation_report.md)).
 - Customers were assigned to email or no email **at random**, so the difference measures what the email caused, not who happened to receive it. That is the CFO's original concern, addressed directly.
-- Both emails cleared every pre-registered rule ([readout](05_readout.md)).
+- Both emails cleared every pre-registered rule ([readout](ch4_results_readout.md)).
 
 ## How robust is the money?
 
@@ -63,4 +63,4 @@ Two measurement gaps make the true effect likely *larger*: only online purchases
 
 ---
 
-This memo closes the case. The full analysis is in [lessons 01–07](../README.md#learning-path).
+This memo closes the case. The full story is in the [case study](../../CASE_STUDY.md).

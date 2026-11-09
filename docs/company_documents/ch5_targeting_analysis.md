@@ -1,12 +1,12 @@
-# Step 6: Targeting analysis
+# Chapter 5 · Targeting analysis
 
-> **Scenario note.** The data and results are real (Hillstrom, 2008); margin and cost figures are the invented scenario. Analysis: [`notebooks/06_targeting.ipynb`](../notebooks/06_targeting.ipynb).
+> A company document from **Chapter 5** of the [case study](../../CASE_STUDY.md#5-who-should-get-which-email). The data is real; the people and business figures are an invented scenario. Analysis: [`ch5_targeting.ipynb`](../../notebooks/ch5_targeting.ipynb).
 
 | | |
 |---|---|
-| **Question** | Who should receive which email? (Marketing's third question in the [request](01_request.md)) |
+| **Question** | Who should receive which email? (Marketing's third question in the [request](ch1a_request.md)) |
 | **Author** | Nathan Chen, Data Science |
-| **Status** | Final. **Exploratory**, as classed in the [design doc](03_experiment_design_doc.md): findings here are hypotheses for future tests, not confirmed results |
+| **Status** | Final. **Exploratory**, as classed in the [design doc](ch2_experiment_design_doc.md): findings here are hypotheses for future tests, not confirmed results |
 
 ## TL;DR
 
@@ -59,8 +59,8 @@ On all 64,000 customers, the match rule and "men's to all" differ by less than a
 
 1. **Roll out the men's email to the full active file**, with no targeting.
 2. **Do not build a targeting model** for this campaign type: it adds complexity and risk without measurable gain.
-3. **Use the merchandise-match finding in creative development**, for example a women's email designed to also appeal to men's buyers, and test it against the men's email (see the [decision memo](07_decision_memo.md) for the test design).
+3. **Use the merchandise-match finding in creative development**, for example a women's email designed to also appeal to men's buyers, and test it against the men's email (see the [decision memo](ch6_decision_memo.md) for the test design).
 
 ---
 
-**Next:** [Step 7: decision memo](07_decision_memo.md) (lesson 07).
+**Next:** [Chapter 6 · Decision memo](ch6_decision_memo.md).

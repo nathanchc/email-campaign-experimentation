@@ -1,20 +1,20 @@
-# Step 5: Results readout
+# Chapter 4 · Results readout
 
-> **Scenario note.** The data and results are real (Hillstrom, 2008). The business figures (margin, costs, file size) and the people are the invented scenario from the [request](01_request.md) and [kickoff](02_kickoff_notes.md). Analyses: [lesson 03](../notebooks/03_purchases_and_visits.ipynb) (purchases and visits), [lesson 04](../notebooks/04_revenue.ipynb) (revenue and business case), [lesson 05](../notebooks/05_variance_reduction.ipynb) (variance reduction).
+> A company document from **Chapter 4** of the [case study](../../CASE_STUDY.md#4-results). The data is real; the people and business figures are an invented scenario. Analysis: [`ch4a_purchases_and_visits.ipynb`](../../notebooks/ch4a_purchases_and_visits.ipynb), [`ch4b_revenue.ipynb`](../../notebooks/ch4b_revenue.ipynb), [`ch4c_variance_reduction.ipynb`](../../notebooks/ch4c_variance_reduction.ipynb).
 
 | | |
 |---|---|
 | **Experiment** | Spring e-mail campaigns: incrementality test |
 | **Author** | Nathan Chen, Data Science |
 | **Audience** | Head of E-mail Marketing; CFO; E-mail Operations Manager |
-| **Status** | Final. Analysed exactly as pre-registered in the [design doc](03_experiment_design_doc.md), after the [validation report](04_validation_report.md) gave a go |
+| **Status** | Final. Analysed exactly as pre-registered in the [design doc](ch2_experiment_design_doc.md), after the [validation report](ch3_validation_report.md) gave a go |
 
 ## TL;DR
 
 - **Both emails cause additional purchases, and both pay for themselves many times over.** The men's email more than doubles the purchase rate (+119%); the women's raises it by about half (+54%).
 - **Incremental revenue per email:** men's **$0.77**, women's **$0.42**, against a break-even of **$0.056**. Even the low ends of the confidence intervals are far above break-even.
 - **The men's email is the better campaign** on purchases, visits and revenue.
-- **Recommendation:** approve the e-mail programme and roll out the men's campaign; the [targeting analysis](06_targeting_analysis.md) then checks whether some customers should get the women's email instead.
+- **Recommendation:** approve the e-mail programme and roll out the men's campaign; the [targeting analysis](ch5_targeting_analysis.md) then checks whether some customers should get the women's email instead.
 - **Caveats:** only online purchases are measured and spend is capped at $499 (both make these results conservative); a two-week window cannot rule out purchases merely pulled forward.
 
 ## 1. Results
@@ -51,7 +51,7 @@ Against about $8,000 of creative per campaign, both campaigns pay back many time
 
 ## 3. Which campaign?
 
-The men's email beats the women's on revenue by **$0.35 per email (95% CI $0.05 to $0.66)**. The interval excludes zero, so under the pre-registered rule **the men's email is the winner**. The margin is real but modest: the interval reaches down to a few cents. Whether some customers respond better to the women's email is a targeting question, answered in [step 6](06_targeting_analysis.md).
+The men's email beats the women's on revenue by **$0.35 per email (95% CI $0.05 to $0.66)**. The interval excludes zero, so under the pre-registered rule **the men's email is the winner**. The margin is real but modest: the interval reaches down to a few cents. Whether some customers respond better to the women's email is a targeting question, answered in [chapter 5](ch5_targeting_analysis.md).
 
 ## 4. Decision against the pre-registered rules
 
@@ -77,4 +77,4 @@ The pre-registered regression adjustment confirmed the results but added almost 
 
 ---
 
-**Next:** [Step 6: targeting analysis](06_targeting_analysis.md) (lesson 06).
+**Next:** [Chapter 5 · Targeting analysis](ch5_targeting_analysis.md).

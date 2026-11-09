@@ -1,185 +1,92 @@
-# Email Campaign Experimentation
+# Does email cause sales?
 
-An end-to-end business A/B testing case study built on a real, randomised, three-arm email experiment, with two optional extensions: what goes wrong without randomisation (real data), and a modern multi-arm coupon test (simulated, with known ground truth).
+**An end-to-end A/B testing case study:** a randomised email experiment with 64,000 customers, taken from a CFO's sceptical question to a recommendation with money attached.
 
-The goal is not just to compute a p-value. It is to practise the full discipline a business data scientist follows: understand the business context, define metrics before looking at outcomes, size the test, validate the randomisation, analyse binary and heavy-tailed revenue outcomes correctly, resist post-hoc slicing, and decide who should receive which email.
+`Python` · `experiment design` · `power analysis` · `causal inference` · `uplift modelling` · `sequential testing`
 
-| Part | Data | Status |
-|------|------|--------|
-| **1. The business A/B test** | Hillstrom e-mail experiment (real, randomised) | Core |
-| 2. Without randomisation | Lazada voucher data (real, targeted vs randomised) | Optional |
-| 3. A modern coupon test | Simulated five-arm coupon funnel (known truth) | Optional |
+---
 
-## The business context
+## The question
 
-The data comes from an unnamed US multichannel retailer selling men's and women's apparel through a website and a phone order line (customers ordering from a printed catalogue). It was released in 2008 by Kevin Hillstrom, a consultant to such retailers, as the *MineThatData E-Mail Analytics and Data Mining Challenge*.
+A retailer's email report credits campaigns with $1.2M of revenue a quarter, but it counts every purchase by anyone who got an email. The CFO's question: **how much of that did the email actually *cause*?** Answering it takes a randomised experiment with a holdout group that gets no email.
 
-At the time, email reports typically credited a campaign with every purchase made by anyone who received it. Hillstrom's point was that most of those customers would have bought anyway, so a campaign's true contribution can only be measured against a **holdout group that receives nothing**. That is why this experiment has a no-email control arm, and why it became a reference dataset for measuring incrementality.
+## The answer
 
-## The experiment
+- **Both emails cause extra purchases.** The men's email more than doubled the purchase rate (**+119%**); the women's raised it by half (**+54%**).
+- **They pay for themselves many times over.** The men's email adds **$0.77 of revenue per email** against a break-even of $0.056, about **$183,000 of net margin per send** to the full customer file.
+- **Send the men's email to everyone.** It wins overall, and no targeting rule or machine-learning model did better.
 
-64,000 customers who purchased within the last twelve months were randomly assigned to one of three arms, and their behaviour was tracked for the **two weeks** after the email was sent.
+![Incremental revenue per email against break-even](images/revenue_vs_breakeven.png)
 
-| Arm (`segment`) | Treatment | Customers |
-|-----------------|-----------|-----------|
-| `No E-Mail` | Control: received nothing | 21,306 |
-| `Mens E-Mail` | Campaign featuring men's merchandise | 21,307 |
-| `Womens E-Mail` | Campaign featuring women's merchandise | 21,387 |
+## The case at a glance
 
-The email labels describe the merchandise featured, not the customer's sex.
+**[Read the full case study →](CASE_STUDY.md)** (about 15 minutes, plain language, with charts)
 
-**Outcomes**, measured over the two weeks after the send:
+| Chapter | The question at this stage | What I found |
+|---|---|---|
+| [1. The problem](CASE_STUDY.md#1-the-problem) | What decision depends on this test? | Only a holdout can separate caused sales from sales that would have happened anyway |
+| [2. Designing the test](CASE_STUDY.md#2-designing-the-test) | What lift is worth having, and can the test see it? | Break-even is +11% purchases, but the test can only reliably detect +47%, so "not significant" was pre-defined as inconclusive |
+| [3. Checking the data](CASE_STUDY.md#3-checking-the-data) | Can we trust the data and the randomisation? | Randomisation worked; only online purchases are recorded and spend is capped, so results are conservative |
+| [4. Results](CASE_STUDY.md#4-results) | Did the emails work, and are they worth it? | Both emails clear break-even 7–14× over; the men's email wins |
+| [5. Who should get which email?](CASE_STUDY.md#5-who-should-get-which-email) | Does targeting beat sending to everyone? | No: the women's email only works for women's buyers, and models don't beat a blanket send |
+| [6. The recommendation](CASE_STUDY.md#6-the-recommendation) | What should the business do? | Roll out, keep a long-term holdout; the decision survives even if 93% of the lift were pulled forward |
 
-| Column | Definition |
-|--------|------------|
-| `visit` | 1 if the customer visited the website |
-| `conversion` | 1 if the customer purchased |
-| `spend` | Dollars spent (zero for most customers, heavily skewed for buyers) |
+**Two extensions** show what the main case cannot:
 
-**Pre-treatment covariates:**
+- **[A. Without randomisation](CASE_STUDY.md#extension-a-what-goes-wrong-without-randomisation)** (real Lazada data): a voucher's effect estimated from targeted data was **13× too large**, and statistical corrections couldn't fully fix it.
+- **[B. A five-arm coupon test](CASE_STUDY.md#extension-b-a-coupon-test-with-five-arms-and-the-danger-of-peeking)** (simulation with a known truth): the coupon that maximises orders **loses the most money**, and checking results daily turns 5% false alarms into **22%**.
 
-| Column | Definition |
-|--------|------------|
-| `recency` | Months since last purchase |
-| `history` | Dollars spent in the past year |
-| `history_segment` | `history` in seven buckets |
-| `mens` | 1 if the customer bought men's merchandise in the past year |
-| `womens` | 1 if the customer bought women's merchandise in the past year |
-| `zip_code` | Urban, suburban or rural |
-| `newbie` | 1 if the customer was new in the past twelve months |
-| `channel` | Channels purchased from in the past year: phone, web or multichannel |
+## What this project demonstrates
 
-## The business question
+| Area | Methods |
+|---|---|
+| **Experiment design** | Metric trees and metric roles, pre-registration, break-even analysis, power and minimum detectable effect, holdout sizing |
+| **Validation** | Sample-ratio mismatch tests, covariate balance (standardised differences, joint tests), data-quality checks |
+| **Analysis** | Proportion tests, Holm and Dunnett corrections, bootstrap and delta-method intervals, regression adjustment and CUPED |
+| **Causal inference and ML** | Uplift modelling (T- and S-learners, Qini curves), policy evaluation by inverse propensity weighting, IPW and doubly robust estimation |
+| **Monitoring** | A/A tests, peeking simulations, O'Brien–Fleming sequential boundaries, Bayesian stopping rules |
+| **Engineering** | A tested Python package (`src/expt`, 50 unit tests), reproducible pipeline (`make all`), checksum-verified data downloads |
+| **Communication** | Company-style documents: design doc, validation report, results readout, decision memo |
 
-> **Did either email produce incremental visits, purchases and revenue beyond what would have happened anyway, which email worked better, and which customers should receive which email in the future?**
+## How to read this repo
 
-## Follow the case the way a company runs it
-
-The case is told as it would happen inside the retailer, with you as the data scientist. The data is real; the people, messages and business figures are invented and labelled as a scenario.
-
-| Step | Document | What happens |
-|------|----------|--------------|
-| 1 | [The request](docs/01_request.md) | E-mail Marketing asks for a test; the CFO doubts that email causes any sales |
-| 2 | [Kickoff notes](docs/02_kickoff_notes.md) | The data scientist turns the request into a decision, a metric and constraints |
-| 3 | [Experiment design doc](docs/03_experiment_design_doc.md) | Break-even lift, power, the holdout split and decision rules, signed off before launch ([numbers](notebooks/01_experiment_design.ipynb)) |
-| 4 | [Validation report](docs/04_validation_report.md) | Go / no-go: data quality, sample ratio and covariate balance, checked before any result is read ([checks](notebooks/02_validation.ipynb)) |
-| 5 | [Results readout](docs/05_readout.md) | Both emails cause extra purchases and clear break-even many times over; the men's email wins ([purchases](notebooks/03_purchases_and_visits.ipynb), [revenue](notebooks/04_revenue.ipynb), [precision](notebooks/05_variance_reduction.ipynb)) |
-| 6 | [Targeting analysis](docs/06_targeting_analysis.md) | Who should get which email: the slicing trap, a merchandise-match effect, uplift models, and why "men's email to everyone" wins ([analysis](notebooks/06_targeting.ipynb)) |
-| 7 | [Decision memo](docs/07_decision_memo.md) | The recommendation, the money and how robust it is, risks, and the next experiments with sample sizes ([numbers](notebooks/07_decision_memo.ipynb)) |
-
-The headline of the design: **a campaign pays for itself at about +11% more purchases, but a 64,000-customer test can reliably detect only about +47%.** How a data scientist plans around that gap, and gets stakeholders to agree to it in advance, is the subject of lesson 01.
-
-## Learning path
-
-Each notebook is one lesson. Reusable code lives in `src/expt` and is tested in `tests/`.
-
-### Part 1: the business A/B test (Hillstrom)
-
-| # | Notebook | What you learn |
-|---|----------|----------------|
-| 01 | `01_experiment_design.ipynb` + [docs](docs/) | Designing the test the way a company does: from the request and kickoff to a signed design doc with metric roles, the break-even lift, power, the holdout split and decision rules, all before any outcome is seen |
-| 02 | `02_validation.ipynb` | Data quality checks, sample-ratio mismatch, covariate balance and the multiple-testing trap inside balance checks, ending in a go / no-go before any result is read |
-| 03 | `03_purchases_and_visits.ipynb` | Purchase and visit rates: proportion tests, confidence intervals for absolute and relative lift, Holm correction, and the conditional-metric trap (purchases among visitors) |
-| 04 | `04_revenue.ipynb` | Revenue per customer: zero-inflated, heavy-tailed data; Welch vs bootstrap intervals; why Mann-Whitney is the wrong test; decomposition; the business case against break-even |
-| 05 | `05_variance_reduction.ipynb` | Regression adjustment and CUPED: why they barely help on this data, a simulation of when they do, and what to log for the next test |
-| 06 | `06_targeting.ipynb` | The slicing trap, testing one hypothesis with a reason, T- and S-learner uplift models with Qini curves across repeated splits, and evaluating targeting policies with inverse propensity weighting |
-| 07 | `07_decision_memo.ipynb` | Turning results into a decision: value of the rollout, break-even and sensitivity analysis, and sizing the follow-up experiments |
-
-### Part 2 (optional): what goes wrong without randomisation (Lazada)
-
-Summary of the findings: [docs/part2_selection_bias.md](docs/part2_selection_bias.md).
-
-| # | Notebook | What you learn |
-|---|----------|----------------|
-| 08 | `08_selection_bias_lazada.ipynb` | Lazada released the same voucher treatment twice: assigned by its targeting system, and assigned at random. The targeted data suggests a six-fold effect; the randomised data shows +11%. Outcome regression, propensity weighting and doubly robust estimation remove most of the bias but none recovers the randomised answer, and why: overlap, unmeasured confounding and population shift |
-
-### Part 3 (optional): a modern coupon test (simulated)
-
-Summary of the findings: [docs/part3_coupon_simulation.md](docs/part3_coupon_simulation.md).
-
-| # | Notebook | What you learn |
-|---|----------|----------------|
-| 09 | `09_simulated_coupon_experiment.ipynb` | A food-delivery coupon test with five coupon levels and an offer → click → order funnel, with a known truth: multi-arm comparisons (Holm, Dunnett), dose-response, the orders-per-click trap, why the order-maximising coupon loses money, and targeting expensive treatments |
-| 10 | `10_simulated_monitoring.ipynb` | A/A tests, how daily peeking turns 5% false positives into 22%, a calibrated O'Brien–Fleming sequential design, and why Bayesian stopping rules have the same problem |
-
-## Why this dataset
-
-Before choosing, we compared the public datasets most often used for A/B testing and uplift modelling against what a business case needs:
-
-| Dataset | Business context stated | Metrics defined | Randomised | User-level | Has money |
-|---------|------------------------|-----------------|------------|------------|-----------|
-| **Hillstrom** (2008, US retailer, email) | Yes | Yes: visit, purchase, spend | Yes | Yes | Yes |
-| X5 RetailHero (2019, Russian grocer) | Partly | "A purchase afterward", no window | Not stated | Yes | Pre-period only |
-| Lazada (2022, Alibaba) | Partly (vouchers) | No: the outcome is an undefined `label` | Test set only | Yes | No |
-| MT-LIFT (2024, Meituan) | Partly (coupons) | Click, conversion | Disputed in the repo's issues | Yes | No; downloads no longer available |
-| ASOS (2021, fashion) | Partly | No: "Metric 1–4" | Yes | Group totals only | Unknown |
-| Upworthy (2013–15, media headlines) | Yes | Yes: clicks | 22% of tests flagged for randomisation problems | Group totals only | No |
-| Kaggle tutorial datasets | Usually none | Varies | Unknown | Varies | Often synthetic, with no known truth |
-
-Companies strip exactly what makes a dataset a business case: what the treatment was, what the outcome means, and anything involving money. Newer releases tend to be more anonymised, not less. Hillstrom is the only public dataset where every step of a business A/B test can be done honestly. Its age changes nothing about the methods, and measuring whether a campaign adds anything beyond what would have happened anyway is still the central question in marketing.
-
-The other parts use each remaining source only for what it does well: Lazada for the selection-bias lesson (where the meaning of the outcome does not matter), and a simulation where we define the business, the metrics and the true effects ourselves.
-
-## Repository layout
+| If you want... | Go to |
+|---|---|
+| The story and the results | [`CASE_STUDY.md`](CASE_STUDY.md) |
+| The analysis behind each chapter | [`notebooks/`](notebooks/): `ch2_…` to `ch6_…` for the case, `extA_…` and `extB…` for the extensions |
+| The documents a data scientist would write at each stage | [`docs/company_documents/`](docs/company_documents/) |
+| The reusable code | [`src/expt/`](src/expt/), tested in [`tests/`](tests/) |
 
 ```
 .
-├── data/
-│   ├── raw/            # downloaded files (never committed)
-│   └── processed/      # compact parquet files
-├── docs/               # the case as company documents (steps 1–7) and Part 2–3 summaries
-├── notebooks/          # lessons 01–10, run in order
-├── scripts/
-│   ├── download_data.py
-│   └── prepare_data.py
-├── src/expt/           # reusable experimentation toolkit
-│   ├── data.py         # loading and cleaning the datasets
-│   ├── power.py        # sample size, MDE and power
-│   ├── validation.py   # sample-ratio and covariate balance checks
-│   ├── inference.py    # proportions, means, bootstrap, Holm, regression adjustment, CUPED, delta method
-│   ├── uplift.py       # T- and S-learners, Qini curves
-│   ├── policy.py       # evaluating targeting policies on randomised data
-│   ├── causal.py       # outcome regression, IPW, doubly robust estimation (Part 2)
-│   ├── simulate.py     # simulated coupon experiment with a known truth (Part 3)
-│   ├── sequential.py   # peeking, sequential boundaries, Bayesian monitoring (Part 3)
-│   └── plotting.py     # shared chart style
-├── tests/              # unit tests for the toolkit
-├── requirements.txt
-├── pyproject.toml
-└── Makefile
+├── CASE_STUDY.md            # the full story, start here
+├── notebooks/               # analysis, numbered by chapter
+├── docs/company_documents/  # request, kickoff, design doc, validation report, readout, targeting, memo
+├── src/expt/                # toolkit: power, validation, inference, uplift, policy, causal, simulate, sequential
+├── tests/                   # unit tests for the toolkit
+├── images/                  # charts used in this README and the case study
+├── scripts/                 # data download, preparation and figure export
+└── Makefile                 # make all: data, tests and every notebook
 ```
 
-## Getting started
+## Run it
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-make all           # download and verify both datasets, run the tests, execute every notebook
-jupyter lab
+make all        # downloads and verifies the data, runs the tests, executes every notebook (about 10 minutes)
 ```
 
-`make all` runs, in order:
+Executed notebooks are written to `runs/`, leaving the published ones untouched. To use a specific interpreter: `make all PYTHON=/path/to/python`.
 
-| Step | What it does |
-|------|--------------|
-| `make data` | Downloads the Hillstrom dataset (4 MB) and verifies its checksum |
-| `make data-lazada` | Downloads the Lazada dataset for Part 2 (93 MB) and verifies its checksums |
-| `make prepare` | Converts both to compact parquet files in `data/processed/` |
-| `make test` | Runs the toolkit's unit tests |
-| `make notebooks` | Executes all ten lessons top to bottom; executed copies go to `runs/`, leaving `notebooks/` as published |
+## Data and credits
 
-The whole run takes about 10–15 minutes on a laptop. To use a specific Python, run `make all PYTHON=/path/to/python`.
+- **Hillstrom** (main case): Hillstrom, K. (2008). *The MineThatData E-Mail Analytics and Data Mining Challenge.* [blog.minethatdata.com](https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html). The download script only accepts a file whose SHA-256 checksum matches the original.
+- **Lazada** (extension A): Zhong, K. et al. (2022). *DESCN: Deep Entire Space Cross Networks for Individual Treatment Effect Estimation.* KDD 2022. [github.com/kailiang-zhong/DESCN](https://github.com/kailiang-zhong/DESCN). Distributed by Alibaba Group under a BSD-style license.
+- **Coupon simulation** (extension B): simulated in [`src/expt/simulate.py`](src/expt/simulate.py), loosely modelled on large-scale coupon tests such as Meituan's MT-LIFT.
 
-The download script tries the original MineThatData URL first, then two GitHub mirrors, and only accepts a file whose SHA-256 checksum matches the original (`0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece`).
-
-## Data sources and citations
-
-**Hillstrom.** Hillstrom, K. (2008). *The MineThatData E-Mail Analytics And Data Mining Challenge.* https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html
-
-**Lazada (Part 2).** Zhong, K., Xiao, F., Ren, Y., Liang, Y., Yao, W., Yang, X., and Cen, L. (2022). *DESCN: Deep Entire Space Cross Networks for Individual Treatment Effect Estimation.* KDD 2022. arXiv:2207.09920. https://github.com/kailiang-zhong/DESCN. Distributed by Alibaba Group under a BSD-style license, saved by the download script as `data/raw/LICENSE_lazada`.
-
-No data is committed to this repository. The MIT license below covers this project's code only.
+The company, its people and its business figures (margins, costs, file size) are an invented scenario; the data and results are real. No data is committed to this repository. Code is MIT-licensed.
 
 ## Author
 
-Nathan Chen
+**Nathan Chen**

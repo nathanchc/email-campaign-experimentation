@@ -1,7 +1,7 @@
 """Convert the raw datasets in data/raw/ into parquet files in data/processed/.
 
 Values are kept exactly as in the source files (including known quirks such
-as the "Surburban" spelling in Hillstrom); cleaning is part of lesson 02.
+as the "Surburban" spelling in Hillstrom); cleaning is explained in chapter 3.
 Only the storage types are made compact.
 """
 from pathlib import Path
@@ -46,7 +46,7 @@ def prepare_lazada() -> None:
     for split in ("train", "test"):
         src = RAW_DIR / f"lazada_{split}.csv.gz"
         if not src.exists():
-            print(f"Skipping Lazada ({src.name} not found; run `make data-lazada` for Part 2).")
+            print(f"Skipping Lazada ({src.name} not found; run `make data-lazada` for extension A).")
             return
         header = pd.read_csv(src, nrows=0).columns
         dtypes = {col: ("int8" if col in {"label", "is_treat"} else "float32") for col in header}

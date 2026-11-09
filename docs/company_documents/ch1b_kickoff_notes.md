@@ -1,6 +1,6 @@
-# Step 2: Kickoff notes
+# Chapter 1b · Kickoff notes
 
-> **Scenario note.** The data in this project is real (Hillstrom, 2008). The people, conversations and business figures here are invented to show how an experiment is scoped in practice.
+> A company document from **Chapter 1b** of the [case study](../../CASE_STUDY.md#1-the-problem). The data is real; the people and business figures are an invented scenario.
 
 **Attendees:** Head of E-mail Marketing, E-mail Operations Manager, Finance Business Partner (for the CFO), Data Scientist (Nathan Chen, author)
 
@@ -71,7 +71,7 @@ The active file: customers who bought in the last 12 months. Lapsed customers ha
 
 | Owner | Action |
 |---|---|
-| Data Science | Write the [experiment design doc](03_experiment_design_doc.md) |
+| Data Science | Write the [experiment design doc](ch2_experiment_design_doc.md) |
 | E-mail Operations | Confirm random assignment by customer ID in the platform; send seed tests |
 | E-mail Operations | Report unsubscribes and complaints per group after the window |
 | Finance | Confirm margin and cost figures in writing |

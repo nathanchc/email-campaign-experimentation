@@ -1,6 +1,6 @@
-# Step 3: Experiment design doc
+# Chapter 2 · Experiment design doc
 
-> **Scenario note.** The data in this project is real (Hillstrom, 2008). The business figures and sign-offs are invented, taken from the [request](01_request.md) and [kickoff notes](02_kickoff_notes.md). All calculations are in the appendix notebook, [`notebooks/01_experiment_design.ipynb`](../notebooks/01_experiment_design.ipynb).
+> A company document from **Chapter 2** of the [case study](../../CASE_STUDY.md#2-designing-the-test). The data is real; the people and business figures are an invented scenario. Analysis: [`ch2_experiment_design.ipynb`](../../notebooks/ch2_experiment_design.ipynb).
 
 | | |
 |---|---|
@@ -154,4 +154,4 @@ Written before launch and applied as written:
 
 ---
 
-**Next:** [Step 4: validation report](04_validation_report.md) (lesson 02).
+**Next:** [Chapter 3 · Validation report](ch3_validation_report.md).

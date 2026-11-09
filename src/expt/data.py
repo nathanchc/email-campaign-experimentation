@@ -1,7 +1,7 @@
 """Loading the Hillstrom dataset in analysis-ready form.
 
 The cleaning steps are the ones decided in the validation report
-(docs/04_validation_report.md); lesson 02 explains each of them.
+(docs/company_documents/ch3_validation_report.md); chapter 3 explains each of them.
 """
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ LAZADA_FEATURES = [f"f{i}" for i in range(83)]
 
 
 def load_lazada(split: str) -> pd.DataFrame:
-    """Load the Lazada voucher data (Part 2). ``split`` is "train" (targeted)
+    """Load the Lazada voucher data (extension A). ``split`` is "train" (targeted)
     or "test" (randomised). Reads the compact parquet file if `make prepare`
     has been run, otherwise the raw CSV."""
     if split not in {"train", "test"}:

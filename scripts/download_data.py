@@ -1,7 +1,7 @@
 """Download the project datasets into data/raw/ and verify their integrity.
 
-    python scripts/download_data.py            # Hillstrom (Part 1)
-    python scripts/download_data.py --lazada   # Lazada (Part 2)
+    python scripts/download_data.py            # Hillstrom (main case)
+    python scripts/download_data.py --lazada   # Lazada (extension A)
     python scripts/download_data.py --all      # both
 
 Every file is checked against a known SHA-256 checksum, so a mirror is only
@@ -94,7 +94,7 @@ def fetch(file: RemoteFile) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     group = parser.add_mutually_exclusive_group()
-    group.add_argument("--lazada", action="store_true", help="download only the Lazada dataset (Part 2)")
+    group.add_argument("--lazada", action="store_true", help="download only the Lazada dataset (extension A)")
     group.add_argument("--all", action="store_true", help="download all datasets")
     args = parser.parse_args()
 

@@ -1,6 +1,6 @@
-# Step 1: The request
+# Chapter 1a · The request
 
-> **Scenario note.** The data in this project is real (Hillstrom, 2008). The company's people, messages and business figures in these documents are invented to show how the experiment would be designed in practice. People are referred to by role only.
+> A company document from **Chapter 1a** of the [case study](../../CASE_STUDY.md#1-the-problem). The data is real; the people and business figures are an invented scenario.
 
 ---
 
@@ -34,4 +34,4 @@ Thanks!
 
 ---
 
-**What happens next:** Data Science schedules a kickoff meeting to turn this request into a testable plan. See [Step 2: Kickoff notes](02_kickoff_notes.md).
+**What happens next:** Data Science schedules a kickoff meeting to turn this request into a testable plan. See [Chapter 1b · Kickoff notes](ch1b_kickoff_notes.md).

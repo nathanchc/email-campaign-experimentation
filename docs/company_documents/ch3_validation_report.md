@@ -1,6 +1,6 @@
-# Step 4: Validation report (go / no-go)
+# Chapter 3 · Validation report (go / no-go)
 
-> **Scenario note.** The data in this project is real (Hillstrom, 2008). The people, launch confirmations and sign-offs are invented to show how the step works in practice. All checks are computed in [`notebooks/02_validation.ipynb`](../notebooks/02_validation.ipynb).
+> A company document from **Chapter 3** of the [case study](../../CASE_STUDY.md#3-checking-the-data). The data is real; the people and business figures are an invented scenario. Analysis: [`ch3_data_checks.ipynb`](../../notebooks/ch3_data_checks.ipynb).
 
 | | |
 |---|---|
@@ -18,7 +18,7 @@
 
 ## 1. Launch checklist
 
-From the [design doc](03_experiment_design_doc.md), confirmed at launch by E-mail Operations (scenario):
+From the [design doc](ch2_experiment_design_doc.md), confirmed at launch by E-mail Operations (scenario):
 
 | Item | Status |
 |---|---|
@@ -70,7 +70,7 @@ Chi-square = 0.20, **p = 0.90**. The threshold for a mismatch is p < 0.001. **Pa
 
 ## 6. Decision
 
-**GO.** The randomisation can be trusted and the data is fit for analysis. The readout proceeds exactly as pre-registered in the [design doc](03_experiment_design_doc.md).
+**GO.** The randomisation can be trusted and the data is fit for analysis. The readout proceeds exactly as pre-registered in the [design doc](ch2_experiment_design_doc.md).
 
 **Carried into the readout:**
 
@@ -88,4 +88,4 @@ Chi-square = 0.20, **p = 0.90**. The threshold for a mismatch is p < 0.001. **Pa
 
 ---
 
-**Next:** [Step 5: results readout](05_readout.md) (lessons 03–05).
+**Next:** [Chapter 4 · Results readout](ch4_results_readout.md).
