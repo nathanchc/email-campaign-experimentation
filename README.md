@@ -95,10 +95,12 @@ Summary of the findings: [docs/part2_selection_bias.md](docs/part2_selection_bia
 
 ### Part 3 (optional): a modern coupon test (simulated)
 
+Summary of the findings: [docs/part3_coupon_simulation.md](docs/part3_coupon_simulation.md).
+
 | # | Notebook | What you learn |
 |---|----------|----------------|
-| 09 | `09_simulated_coupon_experiment.ipynb` | A food-delivery coupon test with five coupon levels and an impression → click → order funnel, calibrated to published industry rates: multi-arm comparisons, dose-response, the biased conversion-given-click metric, profit per arm against a known truth |
-| 10 | `10_simulated_monitoring.ipynb` | A/A tests, the false-positive rate under peeking, sequential testing and Bayesian analysis |
+| 09 | `09_simulated_coupon_experiment.ipynb` | A food-delivery coupon test with five coupon levels and an offer → click → order funnel, with a known truth: multi-arm comparisons (Holm, Dunnett), dose-response, the orders-per-click trap, why the order-maximising coupon loses money, and targeting expensive treatments |
+| 10 | `10_simulated_monitoring.ipynb` | A/A tests, how daily peeking turns 5% false positives into 22%, a calibrated O'Brien–Fleming sequential design, and why Bayesian stopping rules have the same problem |
 
 ## Why this dataset
 
@@ -125,22 +127,25 @@ The other parts use each remaining source only for what it does well: Lazada for
 ├── data/
 │   ├── raw/            # downloaded files (never committed)
 │   └── processed/      # compact parquet files
-├── docs/               # the case as company documents: request, kickoff, design doc
-├── notebooks/          # numbered lessons, run in order
+├── docs/               # the case as company documents (steps 1–7) and Part 2–3 summaries
+├── notebooks/          # lessons 01–10, run in order
 ├── scripts/
 │   ├── download_data.py
 │   └── prepare_data.py
 ├── src/expt/           # reusable experimentation toolkit
-│   ├── power.py        # sample size / MDE
-│   ├── validation.py   # SRM and covariate balance checks
-│   ├── inference.py    # proportions, corrections, bootstrap, CUPED
-│   ├── uplift.py       # uplift models, Qini
-│   ├── policy.py       # targeting policies
-│   ├── causal.py       # propensity scores, weighting, doubly robust (Part 2)
-│   └── simulate.py     # coupon experiment generator (Part 3)
+│   ├── data.py         # loading and cleaning the datasets
+│   ├── power.py        # sample size, MDE and power
+│   ├── validation.py   # sample-ratio and covariate balance checks
+│   ├── inference.py    # proportions, means, bootstrap, Holm, regression adjustment, CUPED, delta method
+│   ├── uplift.py       # T- and S-learners, Qini curves
+│   ├── policy.py       # evaluating targeting policies on randomised data
+│   ├── causal.py       # outcome regression, IPW, doubly robust estimation (Part 2)
+│   ├── simulate.py     # simulated coupon experiment with a known truth (Part 3)
+│   ├── sequential.py   # peeking, sequential boundaries, Bayesian monitoring (Part 3)
+│   └── plotting.py     # shared chart style
 ├── tests/              # unit tests for the toolkit
-├── reports/            # decision memo and figures
 ├── requirements.txt
+├── pyproject.toml
 └── Makefile
 ```
 
@@ -149,12 +154,21 @@ The other parts use each remaining source only for what it does well: Lazada for
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-make data          # downloads the Hillstrom dataset (4 MB) and verifies its checksum
-make prepare       # converts it to parquet in data/processed/
+make all           # download and verify both datasets, run the tests, execute every notebook
 jupyter lab
 ```
 
-For Part 2, `make data-lazada` downloads the Lazada dataset (93 MB); `make prepare` then converts it too.
+`make all` runs, in order:
+
+| Step | What it does |
+|------|--------------|
+| `make data` | Downloads the Hillstrom dataset (4 MB) and verifies its checksum |
+| `make data-lazada` | Downloads the Lazada dataset for Part 2 (93 MB) and verifies its checksums |
+| `make prepare` | Converts both to compact parquet files in `data/processed/` |
+| `make test` | Runs the toolkit's unit tests |
+| `make notebooks` | Executes all ten lessons top to bottom; executed copies go to `runs/`, leaving `notebooks/` as published |
+
+The whole run takes about 10–15 minutes on a laptop. To use a specific Python, run `make all PYTHON=/path/to/python`.
 
 The download script tries the original MineThatData URL first, then two GitHub mirrors, and only accepts a file whose SHA-256 checksum matches the original (`0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece`).
 
