@@ -35,6 +35,8 @@ One experiment with 200,000 users per arm (no coupon, ¥3, ¥5, ¥8, ¥12):
 
 With a real +5% lift, the sequential design keeps 94% power (95% for a single final look) and stops on average around day 9 instead of 14.
 
+Simulated percentages depend slightly on the numpy version (different random draws from the same seed): on another machine they may differ by a few tenths of a point, for example 4.9% instead of 4.5%. The conclusions are the same.
+
 ## Lessons
 
 - Pick the metric that matches the business goal; for costly treatments that is profit.
